@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Morning Signup Briefing</title>
+  <style>
+    *,*::before,*::after { box-sizing: border-box; }
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d12;
+      --bg-soft: #11141b;
+      --line: #1f2330;
+      --line-strong: #2a2f3d;
+      --ink: #e7e9ee;
+      --muted: #8a92a6;
+      --accent: #818cf8;
+      --accent-strong: #a5b4fc;
+      --success: #34d399;
+    }
+    html,body { margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased; min-height: 100vh; }
+    a { color: var(--accent-strong); text-decoration: none; }
+    a:hover { color: #fff; }
+    code, kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: var(--bg-soft); border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; font-size: 0.9em; color: var(--accent-strong); }
+
+    .bg-grid {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(60% 50% at 50% 0%, rgba(129,140,248,0.15), transparent 70%),
+        linear-gradient(transparent 0, rgba(255,255,255,0.02) 1px, transparent 1px) 0 0/100% 36px,
+        linear-gradient(90deg, transparent 0, rgba(255,255,255,0.02) 1px, transparent 1px) 0 0/36px 100%;
+    }
+
+    main { position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 56px 24px 80px; }
+
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -0.01em; font-size: 14px; color: var(--muted); }
+    .brand-dot { width: 10px; height: 10px; border-radius: 3px; background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 0 16px rgba(99,102,241,0.6); }
+    .brand small { color: var(--muted); font-weight: 400; }
+
+    h1 { font-size: clamp(34px, 5vw, 48px); line-height: 1.1; letter-spacing: -0.02em; margin: 28px 0 12px; font-weight: 700; }
+    .tagline { color: var(--muted); font-size: 17px; line-height: 1.6; max-width: 60ch; }
+
+    .status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px;
+      background: rgba(52,211,153,0.08); border: 1px solid rgba(52,211,153,0.25); color: var(--success);
+      font-size: 12px; font-weight: 500; letter-spacing: 0.02em; margin-top: 24px; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    .grid { display: grid; gap: 16px; margin-top: 40px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .card { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 14px; padding: 20px;
+      transition: border-color 0.2s; }
+    .card:hover { border-color: var(--line-strong); }
+    .card .label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+    .card .value { font-size: 18px; margin-top: 8px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+    .card .sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+    section { margin-top: 56px; }
+    section h2 { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 16px; }
+    .pipeline { background: var(--bg-soft); border: 1px solid var(--line); border-radius: 14px; padding: 4px 0; }
+    .step { display: grid; grid-template-columns: 40px 1fr; gap: 16px; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+    .step:last-child { border-bottom: 0; }
+    .step .num { width: 28px; height: 28px; border-radius: 50%; background: rgba(129,140,248,0.12); border: 1px solid rgba(129,140,248,0.3);
+      color: var(--accent-strong); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+    .step .title { font-weight: 600; font-size: 15px; }
+    .step .desc { color: var(--muted); font-size: 13px; line-height: 1.55; margin-top: 4px; }
+
+    footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 16px;
+      justify-content: space-between; align-items: center; color: var(--muted); font-size: 12px; }
+    footer a { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <main>
+    <div class="brand">
+      <span class="brand-dot"></span>
+      Morning Signup Briefing
+      <small>&middot; cron job</small>
+    </div>
+
+    <h1>Sleeping until 7 AM.</h1>
+    <p class="tagline">
+      A scheduled worker that wakes up every morning, pulls yesterday's signups from Supabase,
+      asks an AI to prioritize them, and delivers a briefing to your inbox before the day starts.
+    </p>
+
+    <div class="status-pill">
+      <span class="live-dot"></span>
+      Cron is live &middot; next run 07:00 SGT
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <div class="label">Schedule</div>
+        <div class="value">Daily &middot; 07:00</div>
+        <div class="sub">Asia/Singapore (23:00 UTC)</div>
+      </div>
+      <div class="card">
+        <div class="label">Data source</div>
+        <div class="value">Supabase</div>
+        <div class="sub">public.signups</div>
+      </div>
+      <div class="card">
+        <div class="label">Summarizer</div>
+        <div class="value">Groq</div>
+        <div class="sub">llama-3.3-70b-versatile</div>
+      </div>
+      <div class="card">
+        <div class="label">Delivery</div>
+        <div class="value">Resend &middot; Gmail</div>
+        <div class="sub">HTML + plaintext</div>
+      </div>
+    </div>
+
+    <section>
+      <h2>What happens each morning</h2>
+      <div class="pipeline">
+        <div class="step">
+          <div class="num">1</div>
+          <div>
+            <div class="title">Vercel Cron fires</div>
+            <div class="desc">At 23:00 UTC, Vercel sends an authenticated request to <code>/api/briefing</code>.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">2</div>
+          <div>
+            <div class="title">Fetch yesterday's signups</div>
+            <div class="desc">Queries the Supabase <code>signups</code> table for rows created between yesterday 00:00 and today 00:00 in Singapore time.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">3</div>
+          <div>
+            <div class="title">Summarize with Groq</div>
+            <div class="desc">An LLM prioritizes the signups, groups them by signal, and writes a suggested opener for the highest-priority lead.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="num">4</div>
+          <div>
+            <div class="title">Deliver the briefing</div>
+            <div class="desc">A styled HTML email goes out via Resend (primary) and Gmail (secondary, optional).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>The actual endpoint at <code>/api/briefing</code> is protected by a bearer token.</span>
+      <a href="https://github.com/TSiez/Morning-Briefing-Cron-Job" target="_blank" rel="noopener">Source on GitHub &rarr;</a>
+    </footer>
+  </main>
+</body>
+</html>

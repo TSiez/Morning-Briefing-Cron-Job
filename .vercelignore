@@ -1,0 +1,6 @@
+preview.js
+scheduler.js
+.env
+.env.example
+render.yaml
+*.log

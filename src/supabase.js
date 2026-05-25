@@ -2,20 +2,28 @@ import { createClient } from "@supabase/supabase-js";
 
 let cached = null;
 
-export function getSupabase() {
+async function resolveWebSocket() {
+  if (typeof globalThis.WebSocket !== "undefined") return undefined;
+  const { default: ws } = await import("ws");
+  return ws;
+}
+
+export async function getSupabase() {
   if (cached) return cached;
 
   const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_KEY;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
 
   if (!url || !key) {
     throw new Error(
-      "Supabase is not configured. Set SUPABASE_URL and SUPABASE_KEY in .env (or your hosting provider's env vars)."
+      "Supabase is not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env (or your hosting provider's env vars)."
     );
   }
 
+  const transport = await resolveWebSocket();
   cached = createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false }
+    auth: { persistSession: false, autoRefreshToken: false },
+    ...(transport ? { realtime: { transport } } : {})
   });
   return cached;
 }

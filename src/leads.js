@@ -40,7 +40,7 @@ export async function getLeads(mode = "demo") {
 }
 
 export async function fetchYesterdaysSignups() {
-  const supabase = getSupabase();
+  const supabase = await getSupabase();
   const tz = process.env.SCHEDULE_TZ || "UTC";
   const table = process.env.SUPABASE_SIGNUPS_TABLE || "signups";
   const tsCol = process.env.SUPABASE_SIGNUPS_TIMESTAMP_COLUMN || "created_at";
