@@ -1,0 +1,36 @@
+services:
+  - type: cron
+    name: morning-signup-briefing
+    runtime: node
+    plan: free
+    region: singapore
+    schedule: "0 23 * * *"   # 23:00 UTC = 07:00 Asia/Singapore (UTC+8)
+    buildCommand: npm install
+    startCommand: node index.js --real
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM
+        sync: false
+      - key: RESEND_TO
+        sync: false
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_PASS
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: SUPABASE_SIGNUPS_TABLE
+        value: signups
+      - key: SUPABASE_SIGNUPS_TIMESTAMP_COLUMN
+        value: created_at
+      - key: BRIEFING_MODE
+        value: real
+      - key: SCHEDULE_TZ
+        value: Asia/Singapore
+      - key: TZ
+        value: Asia/Singapore
