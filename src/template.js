@@ -1,14 +1,18 @@
 const BRAND = {
-  accent: "#4f46e5",       // indigo-600
-  accentDark: "#3730a3",   // indigo-800
-  ink: "#0f172a",          // slate-900
-  body: "#1f2937",         // slate-800
-  muted: "#6b7280",        // gray-500
-  hairline: "#e5e7eb",     // gray-200
-  surface: "#ffffff",
-  page: "#f3f4f6",         // gray-100
-  tint: "#eef2ff"          // indigo-50
+  gold1: "#e6b979",        // bright gold (on dark only)
+  gold2: "#c6a559",        // gold
+  goldText: "#9a7415",     // readable gold for text on light backgrounds
+  ink: "#1a1410",          // dark header / headings
+  body: "#2a2218",         // body text on cream
+  muted: "#8a7757",        // warm muted
+  hairline: "#ece3d0",     // warm hairline
+  surface: "#ffffff",      // card surface
+  page: "#f5f0e6",         // warm cream page
+  tint: "#faf5ea",         // gold-tinted callout box
+  tintBorder: "#ecd9b0"    // gold-tinted box border
 };
+
+const FONT_STACK = "'Montserrat','Segoe UI',Helvetica,Arial,sans-serif";
 
 function escapeHtml(s = "") {
   return String(s)
@@ -21,9 +25,9 @@ function escapeHtml(s = "") {
 
 function renderInline(text) {
   let out = escapeHtml(text);
-  out = out.replace(/\*\*([^*]+)\*\*/g, '<strong style="color:#0f172a;font-weight:600;">$1</strong>');
+  out = out.replace(/\*\*([^*]+)\*\*/g, `<strong style="color:${BRAND.ink};font-weight:700;">$1</strong>`);
   out = out.replace(/(^|[\s(])\*([^*\n]+)\*(?=[\s).,!?]|$)/g, '$1<em>$2</em>');
-  out = out.replace(/`([^`]+)`/g, '<code style="background:#f1f5f9;padding:1px 6px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:#0f172a;">$1</code>');
+  out = out.replace(/`([^`]+)`/g, `<code style="background:${BRAND.tint};padding:1px 6px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:${BRAND.goldText};">$1</code>`);
   return out;
 }
 
@@ -68,7 +72,8 @@ function initials(name = "") {
 }
 
 function avatarColor(seed = "") {
-  const palette = ["#4f46e5", "#0ea5e9", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#14b8a6"];
+  // Warm, on-brand palette — bronzes, ambers, golds, coppers.
+  const palette = ["#b8860b", "#c87f3c", "#a8801f", "#9c6b2e", "#caa44a", "#b5722f", "#8f7029", "#cd853f"];
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
   return palette[h % palette.length];
@@ -88,7 +93,7 @@ function leadsTable(leads) {
             <div style="color:${BRAND.muted};font-size:13px;margin-top:2px;">${escapeHtml(l.company)}</div>
           </td>
           <td style="padding:14px 16px;border-bottom:1px solid ${BRAND.hairline};vertical-align:middle;text-align:right;">
-            <a href="mailto:${escapeHtml(l.email)}" style="color:${BRAND.accent};text-decoration:none;font-size:13px;font-weight:500;">${escapeHtml(l.email)}</a>
+            <a href="mailto:${escapeHtml(l.email)}" style="color:${BRAND.goldText};text-decoration:none;font-size:13px;font-weight:600;">${escapeHtml(l.email)}</a>
           </td>
         </tr>`;
     })
@@ -125,24 +130,30 @@ export function renderEmailHtml({ briefing, leads, date = new Date() }) {
       }
     </style>
   </head>
-  <body style="margin:0;padding:0;background:${BRAND.page};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:${BRAND.body};-webkit-font-smoothing:antialiased;">
+  <body style="margin:0;padding:0;background:${BRAND.page};font-family:${FONT_STACK};color:${BRAND.body};-webkit-font-smoothing:antialiased;">
     <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">Your prioritized signups and suggested opener for ${dateStr}.</div>
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:${BRAND.page};padding:40px 16px;">
       <tr>
         <td align="center">
-          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="640" class="mb-shell" style="max-width:640px;background:${BRAND.surface};border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,0.04),0 8px 24px rgba(15,23,42,0.06);">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="640" class="mb-shell" style="max-width:640px;background:${BRAND.surface};border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(26,20,16,0.05),0 12px 32px rgba(26,20,16,0.10);">
 
             <tr>
-              <td style="background:linear-gradient(135deg, ${BRAND.accent} 0%, ${BRAND.accentDark} 100%);padding:28px 36px;" class="mb-pad">
+              <td style="background:${BRAND.ink};background-image:linear-gradient(135deg,#1f1810 0%,#13100b 100%);padding:28px 36px;" class="mb-pad">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                   <tr>
                     <td style="vertical-align:middle;">
-                      <div style="display:inline-block;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.18);color:#fff;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;">Morning Signup Briefing</div>
-                      <h1 style="margin:12px 0 4px;font-size:26px;line-height:1.2;color:#fff;font-weight:700;letter-spacing:-0.01em;">${dateStr}</h1>
-                      <div style="color:rgba(255,255,255,0.78);font-size:14px;">${leads.length} new ${leads.length === 1 ? "signup" : "signups"} from yesterday</div>
+                      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+                        <td style="vertical-align:middle;padding-right:10px;">
+                          <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#e6b979,#c6a559);text-align:center;line-height:30px;color:#1a1410;font-size:17px;font-weight:800;">&#10003;</div>
+                        </td>
+                        <td style="vertical-align:middle;color:#f5ede0;font-size:14px;font-weight:600;letter-spacing:0.01em;">Tester<span style="color:#e6b979;">.io</span></td>
+                      </tr></table>
+                      <div style="display:inline-block;margin-top:16px;padding:4px 10px;border-radius:999px;border:1px solid rgba(230,185,121,0.4);color:#e6b979;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;">Morning Signup Briefing</div>
+                      <h1 style="margin:12px 0 4px;font-size:26px;line-height:1.2;color:#f5ede0;font-weight:700;letter-spacing:-0.01em;">${dateStr}</h1>
+                      <div style="color:#b9a986;font-size:14px;">${leads.length} new ${leads.length === 1 ? "signup" : "signups"} from yesterday</div>
                     </td>
                     <td class="mb-hide-sm" style="vertical-align:middle;text-align:right;width:64px;">
-                      <div style="width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,0.16);line-height:48px;text-align:center;font-size:22px;">&#x2600;&#xfe0f;</div>
+                      <div style="width:48px;height:48px;border-radius:12px;background:rgba(230,185,121,0.14);border:1px solid rgba(230,185,121,0.3);line-height:48px;text-align:center;font-size:22px;">&#x2600;&#xfe0f;</div>
                     </td>
                   </tr>
                 </table>
@@ -151,8 +162,8 @@ export function renderEmailHtml({ briefing, leads, date = new Date() }) {
 
             <tr>
               <td style="padding:28px 36px 8px;" class="mb-pad">
-                <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${BRAND.muted};font-weight:600;">Today's plan</div>
-                <div style="margin-top:14px;background:${BRAND.tint};border:1px solid #e0e7ff;border-radius:12px;padding:18px 20px;">
+                <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${BRAND.goldText};font-weight:700;">Today's plan</div>
+                <div style="margin-top:14px;background:${BRAND.tint};border:1px solid ${BRAND.tintBorder};border-radius:12px;padding:18px 20px;">
                   <div style="font-size:15px;line-height:1.65;color:${BRAND.body};">
                     ${briefingToHtml(briefing)}
                   </div>
@@ -163,7 +174,7 @@ export function renderEmailHtml({ briefing, leads, date = new Date() }) {
             <tr>
               <td style="padding:24px 36px 8px;" class="mb-pad">
                 <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;">
-                  <h2 style="margin:0;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${BRAND.muted};font-weight:600;">Signup roster</h2>
+                  <h2 style="margin:0;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${BRAND.goldText};font-weight:700;">Signup roster</h2>
                 </div>
                 ${leadsTable(leads)}
               </td>
