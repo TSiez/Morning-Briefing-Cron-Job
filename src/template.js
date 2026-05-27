@@ -1,18 +1,20 @@
+// Vintage newspaper palette — monochrome ink on aged newsprint.
 const BRAND = {
-  gold1: "#e6b979",        // bright gold (on dark only)
-  gold2: "#c6a559",        // gold
-  goldText: "#9a7415",     // readable gold for text on light backgrounds
-  ink: "#1a1410",          // dark header / headings
-  body: "#2a2218",         // body text on cream
-  muted: "#8a7757",        // warm muted
-  hairline: "#ece3d0",     // warm hairline
-  surface: "#ffffff",      // card surface
-  page: "#f5f0e6",         // warm cream page
-  tint: "#faf5ea",         // gold-tinted callout box
-  tintBorder: "#ecd9b0"    // gold-tinted box border
+  gold1: "#16130c",        // (kept key names) — now ink
+  gold2: "#16130c",
+  goldText: "#16130c",     // links: black, underlined
+  ink: "#16130c",          // headings / masthead
+  body: "#2a2419",         // body text
+  muted: "#6d6250",        // muted captions
+  hairline: "#d6cbb3",     // hairline rules on paper
+  surface: "#efe8d8",      // the "sheet" (newsprint cream)
+  page: "#e2dac6",         // outer page
+  tint: "#e7dfcb",         // callout box fill
+  tintBorder: "#16130c"    // callout box border (black)
 };
 
-const FONT_STACK = "'Montserrat','Segoe UI',Helvetica,Arial,sans-serif";
+const FONT_STACK = "'PT Serif',Georgia,'Times New Roman',serif";
+const DISPLAY_STACK = "'Playfair Display',Georgia,'Times New Roman',serif";
 
 function escapeHtml(s = "") {
   return String(s)
@@ -71,36 +73,29 @@ function initials(name = "") {
     .toUpperCase();
 }
 
-function avatarColor(seed = "") {
-  // Warm, on-brand palette — bronzes, ambers, golds, coppers.
-  const palette = ["#b8860b", "#c87f3c", "#a8801f", "#9c6b2e", "#caa44a", "#b5722f", "#8f7029", "#cd853f"];
-  let h = 0;
-  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-  return palette[h % palette.length];
-}
-
 function leadsTable(leads) {
   const rows = leads
     .map((l, i) => {
-      const color = avatarColor(l.email);
+      const last = i === leads.length - 1;
+      const border = last ? "none" : `1px solid ${BRAND.hairline}`;
       return `
         <tr>
-          <td style="padding:14px 16px;border-bottom:1px solid ${BRAND.hairline};vertical-align:middle;width:44px;">
-            <div style="width:36px;height:36px;border-radius:50%;background:${color};color:#fff;font-weight:600;font-size:13px;line-height:36px;text-align:center;letter-spacing:0.02em;">${escapeHtml(initials(l.name))}</div>
+          <td style="padding:13px 14px;border-bottom:${border};vertical-align:middle;width:44px;">
+            <div style="width:34px;height:34px;border-radius:50%;border:1.5px solid ${BRAND.ink};color:${BRAND.ink};font-family:${DISPLAY_STACK};font-weight:700;font-size:13px;line-height:31px;text-align:center;">${escapeHtml(initials(l.name))}</div>
           </td>
-          <td style="padding:14px 16px;border-bottom:1px solid ${BRAND.hairline};vertical-align:middle;">
-            <div style="font-weight:600;color:${BRAND.ink};font-size:14px;">${escapeHtml(l.name)}</div>
-            <div style="color:${BRAND.muted};font-size:13px;margin-top:2px;">${escapeHtml(l.company)}</div>
+          <td style="padding:13px 14px;border-bottom:${border};vertical-align:middle;">
+            <div style="font-family:${DISPLAY_STACK};font-weight:700;color:${BRAND.ink};font-size:15px;">${escapeHtml(l.name)}</div>
+            <div style="color:${BRAND.muted};font-size:13px;font-style:italic;margin-top:1px;">${escapeHtml(l.company)}</div>
           </td>
-          <td style="padding:14px 16px;border-bottom:1px solid ${BRAND.hairline};vertical-align:middle;text-align:right;">
-            <a href="mailto:${escapeHtml(l.email)}" style="color:${BRAND.goldText};text-decoration:none;font-size:13px;font-weight:600;">${escapeHtml(l.email)}</a>
+          <td style="padding:13px 14px;border-bottom:${border};vertical-align:middle;text-align:right;">
+            <a href="mailto:${escapeHtml(l.email)}" style="color:${BRAND.ink};text-decoration:none;font-size:12px;border-bottom:1px solid ${BRAND.hairline};">${escapeHtml(l.email)}</a>
           </td>
         </tr>`;
     })
     .join("");
 
   return `
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;border:1px solid ${BRAND.hairline};border-radius:12px;overflow:hidden;background:#fff;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;border:1px solid ${BRAND.ink};background:${BRAND.surface};">
       <tbody>${rows}</tbody>
     </table>`;
 }
@@ -122,10 +117,12 @@ export function renderEmailHtml({ briefing, leads, date = new Date() }) {
     <meta name="color-scheme" content="light" />
     <meta name="supported-color-schemes" content="light" />
     <title>Morning Signup Briefing — ${shortDate}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
     <style>
       @media (max-width: 620px) {
-        .mb-shell { width: 100% !important; border-radius: 0 !important; }
-        .mb-pad { padding-left: 20px !important; padding-right: 20px !important; }
+        .mb-shell { width: 100% !important; }
+        .mb-pad { padding-left: 22px !important; padding-right: 22px !important; }
         .mb-hide-sm { display: none !important; }
       }
     </style>
@@ -135,35 +132,28 @@ export function renderEmailHtml({ briefing, leads, date = new Date() }) {
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:${BRAND.page};padding:40px 16px;">
       <tr>
         <td align="center">
-          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="640" class="mb-shell" style="max-width:640px;background:${BRAND.surface};border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(26,20,16,0.05),0 12px 32px rgba(26,20,16,0.10);">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="640" class="mb-shell" style="max-width:640px;background:${BRAND.surface};border:1px solid ${BRAND.ink};box-shadow:0 2px 0 rgba(22,19,12,0.35),0 14px 36px rgba(22,19,12,0.12);">
 
+            <!-- Nameplate -->
             <tr>
-              <td style="background:${BRAND.ink};background-image:linear-gradient(135deg,#1f1810 0%,#13100b 100%);padding:28px 36px;" class="mb-pad">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
-                  <tr>
-                    <td style="vertical-align:middle;">
-                      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-                        <td style="vertical-align:middle;padding-right:10px;">
-                          <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#e6b979,#c6a559);text-align:center;line-height:30px;color:#1a1410;font-size:17px;font-weight:800;">&#10003;</div>
-                        </td>
-                        <td style="vertical-align:middle;color:#f5ede0;font-size:14px;font-weight:600;letter-spacing:0.01em;">Tester<span style="color:#e6b979;">.io</span></td>
-                      </tr></table>
-                      <div style="display:inline-block;margin-top:16px;padding:4px 10px;border-radius:999px;border:1px solid rgba(230,185,121,0.4);color:#e6b979;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;font-weight:700;">Morning Signup Briefing</div>
-                      <h1 style="margin:12px 0 4px;font-size:26px;line-height:1.2;color:#f5ede0;font-weight:700;letter-spacing:-0.01em;">${dateStr}</h1>
-                      <div style="color:#b9a986;font-size:14px;">${leads.length} new ${leads.length === 1 ? "signup" : "signups"} from yesterday</div>
-                    </td>
-                    <td class="mb-hide-sm" style="vertical-align:middle;text-align:right;width:64px;">
-                      <div style="width:48px;height:48px;border-radius:12px;background:rgba(230,185,121,0.14);border:1px solid rgba(230,185,121,0.3);line-height:48px;text-align:center;font-size:22px;">&#x2600;&#xfe0f;</div>
-                    </td>
-                  </tr>
-                </table>
+              <td style="padding:24px 36px 14px;border-bottom:3px double ${BRAND.ink};text-align:center;" class="mb-pad">
+                <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:${BRAND.muted};font-family:${FONT_STACK};">Tester.io &middot; Internal Dispatch</div>
+                <h1 style="margin:10px 0 0;font-family:${DISPLAY_STACK};font-weight:900;font-size:38px;line-height:0.95;letter-spacing:-0.02em;color:${BRAND.ink};text-transform:uppercase;">Morning Briefing</h1>
+                <div style="margin-top:10px;font-family:${DISPLAY_STACK};font-style:italic;font-size:15px;color:${BRAND.body};">${dateStr}</div>
+              </td>
+            </tr>
+
+            <!-- Black strip -->
+            <tr>
+              <td style="background:${BRAND.ink};padding:9px 36px;text-align:center;" class="mb-pad">
+                <div style="font-family:${DISPLAY_STACK};font-weight:700;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:${BRAND.surface};">${leads.length} new ${leads.length === 1 ? "signup" : "signups"} from yesterday</div>
               </td>
             </tr>
 
             <tr>
-              <td style="padding:28px 36px 8px;" class="mb-pad">
-                <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${BRAND.goldText};font-weight:700;">Today's plan</div>
-                <div style="margin-top:14px;background:${BRAND.tint};border:1px solid ${BRAND.tintBorder};border-radius:12px;padding:18px 20px;">
+              <td style="padding:26px 36px 8px;" class="mb-pad">
+                <div style="font-family:${FONT_STACK};font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:${BRAND.ink};font-weight:700;border-bottom:1px solid ${BRAND.ink};padding-bottom:6px;">Today's Plan</div>
+                <div style="margin-top:14px;background:${BRAND.tint};border:1px solid ${BRAND.tintBorder};padding:18px 20px;">
                   <div style="font-size:15px;line-height:1.65;color:${BRAND.body};">
                     ${briefingToHtml(briefing)}
                   </div>
@@ -174,7 +164,7 @@ export function renderEmailHtml({ briefing, leads, date = new Date() }) {
             <tr>
               <td style="padding:24px 36px 8px;" class="mb-pad">
                 <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;">
-                  <h2 style="margin:0;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:${BRAND.goldText};font-weight:700;">Signup roster</h2>
+                  <h2 style="margin:0;width:100%;font-family:${FONT_STACK};font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:${BRAND.ink};font-weight:700;border-bottom:1px solid ${BRAND.ink};padding-bottom:6px;">Signup Roster</h2>
                 </div>
                 ${leadsTable(leads)}
               </td>

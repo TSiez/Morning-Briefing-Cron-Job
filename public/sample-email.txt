@@ -1,0 +1,24 @@
+Morning Briefing — Wednesday, May 27, 2026
+
+You got 6 new signups yesterday, 2 are from SaaS companies — here's who to contact first.
+
+* 4 signups are from companies with a corporate domain, indicating potential for larger deals
+* 2 signups are from companies with "growth" or "flow" in their name, suggesting a focus on scaling
+* 2 signups are from companies with a generic or descriptive name, potentially indicating smaller or newer businesses
+
+1. Emily Johnson — Acme Corp — signed up with a corporate domain and email, indicating a potential large deal
+2. Michael Smith — FinFlow — signed up from a company with a name suggesting financial expertise, a key target market
+3. Olivia Brown — GrowthLab — signed up from a company with a name indicating a focus on scaling, a good fit for the product
+4. James Williams — Stackr — signed up from a company with a tech-sounding name, potentially indicating a good technical fit
+5. Sophia Davis — Clarity HQ — signed up from a company with a name suggesting a focus on clarity, a key product benefit
+6. Liam Miller — BuildCo — signed up from a company with a generic name, potentially indicating a smaller or newer business
+
+For Emily Johnson at Acme Corp, consider reaching out with: "Hi Emily, saw that you signed up from Acme Corp and wanted to reach out to see how our product can help support your team's goals, given your company's size and scope."
+
+Today's leads (6):
+  - Emily Johnson (Acme Corp) <emily.johnson@acmecorp.com>
+  - Michael Smith (FinFlow) <michael.smith@finflow.com>
+  - Olivia Brown (GrowthLab) <olivia.brown@growthlab.com>
+  - James Williams (Stackr) <james.williams@stackr.com>
+  - Sophia Davis (Clarity HQ) <sophia.davis@clarityhq.com>
+  - Liam Miller (BuildCo) <liam.miller@buildco.com>

@@ -9,6 +9,7 @@
     "demo": "node index.js --demo",
     "real": "node index.js --real",
     "preview": "node preview.js",
+    "build:studio": "node build-studio.mjs",
     "schedule": "node scheduler.js"
   },
   "dependencies": {
